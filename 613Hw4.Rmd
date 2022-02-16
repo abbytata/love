@@ -1,0 +1,108 @@
+---
+title: "Untitled"
+author: "abby tata"
+date: "2/9/2022"
+output: word_document
+---
+
+```{r }
+library(tidyverse)
+```
+
+```{r}
+iris
+
+```
+```{r}
+#1a Use the R function nrow to confirm that the iris data frame has 150 rows. Then use and show R code that features a map function to confirm that the iris data frame has 150 rows.
+
+map_dbl(iris, length)
+
+
+#1b Each column of the iris data frame has a unique number of values or objects. For example, the column Sepal.Length has 150 values but 35 of them are unique. Use and show R code that features a map function to find the number of unique values or objects for each column of the iris data frame.
+
+  map_dbl(iris, ~length(unique(.x)))
+
+```
+
+```{r}
+#2 Use and show R code that features a nested loop that will produce the  5 by 3 matrix shown below.
+matrix1 = matrix(nrow=3, ncol=5) # create a 4 x 4 matrix(4 rows and 4 columns)
+for(i in 1:nrow(matrix1))        #// Assigned a variable 'i' for each row
+{
+  for(j in 1:ncol(matrix1))      #// Assigned a variable 'j' for each column
+  {
+    matrix1[i,j] =j-i        #// calculating product of two indeces
+  }
+}
+print(matrix1)
+```
+
+```{r}
+#3 Use and show R code that will produce a tibble that features 10 randomly generated values that are normally distributed, with means of -10, 0, 10 and 100 respectfully.  Run your code again, producing a second tibble, that confirms random values, hence the second table will not have the same values.
+
+
+rnorm(10) -> k
+sd(k)->S
+mu<- list(-10,0,10,100)
+
+##############################################
+map2(mu, S, rnorm, n = 10)%>%
+  as_tibble(.name_repair = ~ c("col1", "col2","col3","col4"))
+
+map2(mu, S, rnorm, n = 10)%>%
+  as_tibble(.name_repair = ~ c("col1", "col2","col3","col4"))
+
+#other way
+##############################################
+map2(mu, S, rnorm, n = 10)-> x
+map2(mu, S, rnorm, n = 10)->y
+as_tibble(x, .name_repair = ~ c("col1", "col2","col3","col4"))
+as_tibble(y, .name_repair =  ~ c("col1", "col2","col3","col4"))
+
+##the way i wanted to tried to find how to do
+##############################################
+
+as_tibble( .name_repair = ~ c("column1", "column2","column3","column4"), map2(mu, S, rnorm, n = 10))
+as_tibble( .name_repair = ~ c("column1", "column2","column3","column4"), map2(mu, S, rnorm, n = 10))
+
+```
+
+```{r}
+#4 a) In statistics, a z score indicates the standard deviation distance between the mean and a specific value of the data set. What formula is used to find a z score? Use and show R coding that features a map function to iteratively find z scores across the lists given above.
+
+X <- list(12, 14, 15, 18, 19, 22,10,18,18)
+Mean <- list(16, 16, 16, 16, 16,16,16,16,16)
+sd <- list(2, 2, 2, 2, 2,2,2,2,2)
+
+pmap_dbl(list(X,Mean,sd), function(first, second, third) (first - second)/third)
+
+#4b The test statistic for a population mean is given by the formula ((X - mean)/s/sqrt(n)) Use and show R coding that features a map function to iteratively find test statistics for population means across the lists given above.
+ pmap_dbl(list(X,Mean,sd), function(first, second, third) (first - second)/third/sqrt(9))
+ 
+ #or
+ pmap_dbl(list(X,Mean,sd), function(first, second, third) (first - second)/third/sqrt(length(x)))
+```
+
+```{r}
+#5a Another purr package function is the keep( ) function. Research, explore, and use the keep( ) function to extract all number from the vector V given above that are less than 20
+
+V <- c(10,15,17,22,32,38,42)
+keep(V, V < 20)
+
+#5b Another purr package function is the discard( ) function. Research, explore, and use the discard( ) function to eliminate all numbers from the vector V given above that are less than 20
+V <- c(10,15,17,22,32,38,42)
+
+discard(V, V < 20)
+```
+
+```{r}
+#6 Another purr package function is the safely( ) function. Research, explore, and apply the safely( ) function  to the given vector below as illustrated.
+  
+
+U = list(10,15,"mary",22,32,"james",42)
+  map(U, safely(~ .x + 15))
+  
+#In four or five sentences, explain the specific output for this problem and how the definition and the application of the safely( ) function is used.
+```
+
